@@ -31,15 +31,6 @@ struct dynvec_struct{
 	paciente *v;	
 };
 
-struct queue_struct{
-	QueueNode *front;
-	QueueNode *rear;
-};
-
-struct queue_node{
-	void info;
-	QueueNode *next;
-}
 
 DynVec *dv_create(int n_maximo){
 	DynVec *dv = (DynVec *)malloc(sizeof(DynVec));
@@ -49,15 +40,6 @@ DynVec *dv_create(int n_maximo){
 	dv->v = (paciente *)malloc(n_maximo * sizeof(paciente));
 	
 	return dv;
-}
-
-Queue *q_create(char tipo){
-
-	Queue *q = (Queue *)malloc(sizeof(Queue));
-
-	q->front = q->rear = NULL;
-
-	return q;
 }
 
 void dv_insert(DynVec *lista, paciente *p){
