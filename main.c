@@ -5,22 +5,24 @@
 #include <stdio.h>
 
 int main(){
-	int prob, c;	
+	int prob;
+	int tempo = 0;	
 	
-	DynVec *listaPacientes = create(10000, 'P');
-	DynVec *filaExame = create(100, 'E');
-	DynVec *filaLaudo = create(10000, 'L');;
+	DynVec *listaPacientes = dv_create(10000);
+	Queue *filaExame = q_create();
+	Queue *filaLaudo = q_create();;
 
 	raioX *maquina[5];
-	/*
-	while tempo <= 200{
+	
+	while (tempo <= 200) {
 		srand(time(NULL));
 		prob = rand() % (10 + 1 - 1) + 1;
 		if(prob == 1 || prob == 2){
-			paciente *p = cria_paciente(c);
-			//dv_insert();
+			paciente *p = cria_paciente(tempo);
+			p = (void) p;
+			dv_insert(listaPacientes, p);
 		}
-		
+		/*
 		if sizeof(maquinas) < 5{
 			struct raioX
 			tempoFinal = rand(5,10);
@@ -35,10 +37,10 @@ int main(){
 					adiciona o registro na fila para laudo
 		}
 
-		
-		c++;
+		*/
+		tempo++;
 	}
-*/
+
 	
 /*	
 	// Exemplo de como trabalhar com tempo

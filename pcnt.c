@@ -28,43 +28,70 @@ struct raioX_struct{
 struct dynvec_struct{
 	int n;
 	int n_max;
-	void *v;	
+	paciente *v;	
 };
 
-DynVec *create(int n_maximo, char tipo){
+struct queue_struct{
+	QueueNode *front;
+	QueueNode *rear;
+};
+
+struct queue_node{
+	void info;
+	QueueNode *next;
+}
+
+DynVec *dv_create(int n_maximo){
 	DynVec *dv = (DynVec *)malloc(sizeof(DynVec));
 
 	dv->n = 0;
 	dv->n_max = n_maximo;
+	dv->v = (paciente *)malloc(n_maximo * sizeof(paciente));
 	
-	switch(tipo){
-		case 'P':
-			dv->v = (paciente *)malloc(n_maximo * sizeof(paciente));
-			break;
-		case 'E':
-			dv->v = (int *)malloc(n_maximo * sizeof(int));
-			break;
-		case 'L':
-			dv->v = (registro *)malloc(n_maximo * sizeof(registro));
-			break;
-	}
 	return dv;
+}
+
+Queue *q_create(char tipo){
+
+	Queue *q = (Queue *)malloc(sizeof(Queue));
+
+	q->front = q->rear = NULL;
+
+	return q;
+}
+
+void dv_insert(DynVec *lista, paciente *p){
+	printf("Chegou");
+	if(lista->n == lista->n_max){
+		//realloc()
+	}
+	lista->v[++lista->n] = p;
+}
+
+char *geraCPF(){
+	int num;
+	char cpf[12]
+	srand(time(NULL));
+	for(int i = 0; i < 12; i++){
+		num = rand() % (10 + 1);
+		cpf[i] = (char)num;
+	}
+	return cpf;
 }
 
 paciente *cria_paciente(int tempo){
 	char nomes[4][23] = {"Jorge", "Joao", "Camilly", "Bruna"};
 	
 	srand(time(NULL));
-	int cpf = rand() % (99999999999 + 1 - 10000000000) + 10000000000;
+	char cpf[12] = geraCPF();
 	int idade = rand() % (100 + 1);
 
 	paciente *p = (paciente *)malloc(sizeof(paciente));
 	strcpy(p->nome, nomes[rand() % (3 + 1)]);
-	p->cpf = cpf;
+	strcpy(p->cpf,cpf);
 	p->idade = idade;
 	p->tempoEntrada = tempo;
 	p->tempoLaudo = 0;
-
 
 	return p;
 }
