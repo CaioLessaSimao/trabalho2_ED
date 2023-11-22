@@ -14,13 +14,10 @@ int main(){
 	QueueExame *filaExame = qExame_create();
 	QueueLaudo *filaLaudo = qLaudo_create();
 
-	RAIO maquinas[5];
+	RAIO *maquinas[5];
 	
 	for (int i = 0; i < 5; i++){
-		RAIO *r = (RAIO *)malloc(sizeof(RAIO));
-		strcpy(r->id, " ");
-		r->tempo = 0;
-		maquinas[i] = r;
+		maquinas[i] = create_RAIO(" ", 0);
 	}
 	
 	while (tempo <= 200) {

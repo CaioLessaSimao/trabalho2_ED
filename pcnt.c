@@ -30,6 +30,14 @@ struct nodePaciente_struct{
 };
 
 
+RAIO *create_RAIO(char identificador[12], int tempo){
+	RAIO *r = (RAIO *)malloc(sizeof(RAIO));
+	strcpy(r->id, identificador);
+	r->tempo = tempo;
+	return r;
+}
+
+
 ListaPaciente *ll_create(){
 	ListaPaciente *l = (ListaPaciente *)malloc(sizeof(ListaPaciente));
     l->first = NULL; 
@@ -84,28 +92,24 @@ paciente *cria_paciente(int tempo){
 	return p;
 }
 
-void verificaRaioX(RAIO maquinas, QueueExame *filaExame, QueueLaudo *filaLaudo, int instante){
+void verificaRaioX(RAIO **maquinas, QueueExame *filaExame, QueueLaudo *filaLaudo, int instante){
 	srand(time(NULL));
 	for(int i = 0; i < 5; i++){
-		if(maquinas[i].tempo == 0){
+		if(maquinas[i]->tempo == 0){
 			if(!qExame_is_empty(filaExame)){
-				strcpy(maquinas[i].id, filaExame->first->id);
-				maquinas[i].tempo = (rand() % (5 + 1 - 10)) + 10;
-
-				NodePaciente *n = filaExame->first;
-				filaExame->first = n->next;
-				free(n);
+				strcpy(maquinas[i]->id, getIdExame(filaExame));
+				maquinas[i]->tempo = (rand() % (5 + 1 - 10)) + 10;
 			}
 			else{
-				if(maquinas[i].tempo == instante){
-					registro *r = create_registro(maquinas[i].id, instante);
+				if(maquinas[i]->tempo == instante){
+					registro *r = create_registro(filaLaudo,maquinas[i]->id, instante);
 					if(!qExame_is_empty(filaExame)){
-						strcpy(maquinas[i].id, filaExame->first->id);
-						maquinas[i].tempo = (rand() % (5 + 1 - 10)) + 10;
+						strcpy(maquinas[i]->id, getIdExame(filaExame));
+						maquinas[i]->tempo = (rand() % (5 + 1 - 10)) + 10;
 					}
 					else{
-						strcpy(maquinas[i].id, " ");
-						maquinas[i].tempo = 0;
+						strcpy(maquinas[i]->id, " ");
+						maquinas[i]->tempo = 0;
 					}
 				}
 			}

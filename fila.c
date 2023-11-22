@@ -11,7 +11,7 @@ struct queue_struct_exame{
 };
 
 struct queue_node_exame{
-	char info[12];
+	char id[12];
 	QueueNodeExame *next;
 };
 
@@ -30,7 +30,7 @@ int qExame_is_empty(QueueExame *q){
 
 void qExame_enqueue(QueueExame *q, char v[12]){
    QueueNodeExame *node = (QueueNodeExame *)malloc(sizeof(QueueNodeExame));
-   strcpy(node->info, v);
+   strcpy(node->id, v);
    node->next = NULL;
 
    if (qExame_is_empty(q))
@@ -39,6 +39,16 @@ void qExame_enqueue(QueueExame *q, char v[12]){
       q->rear->next = node;
 
    q->rear = node;
+}
+
+char *getIdExame(QueueExame *fila){
+   return fila->front->id;
+}
+
+void retiraNo(QueueExame *fila){
+   QueueNodeExame *n = fila->front;
+   fila->front = n->next;
+   free(n);
 }
 
 

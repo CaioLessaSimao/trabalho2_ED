@@ -13,9 +13,10 @@ typedef struct nodePaciente_struct NodePaciente;
 
 ListaPaciente *ll_create();
 paciente *cria_paciente(int tempo);
+RAIO *create_RAIO(char identificador[12], int tempo);
 void ll_append(ListaPaciente *lista, paciente *p);
 void ll_insert(ListaPaciente *lista, paciente *p);
-void verificaRaioX(RAIO maquinas, QueueExame *filaExame, QueueLaudo *filaLaudo, int instante);
+void verificaRaioX(RAIO **maquinas, QueueExame *filaExame, QueueLaudo *filaLaudo, int instante);
 
 
 #endif

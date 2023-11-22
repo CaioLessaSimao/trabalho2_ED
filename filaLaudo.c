@@ -21,7 +21,9 @@ struct queue_node_laudo{
 	QueueNodeLaudo *next;
 };
 
-
+void create_registro(QueueLaudo *filaLaudo, char id[12],int instante){
+	
+}
 
 
 QueueLaudo *qLaudo_create(){
