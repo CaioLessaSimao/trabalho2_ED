@@ -1,43 +1,38 @@
-#include <stdio.h>
-#include <time.h>
 #include "pcnt.h"
+#include "fila.h"
+#include "filaLaudo.h"
+#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 int main(){
 	int prob;
 	int tempo = 0;	
 	
-	DynVec *listaPacientes = dv_create(10000);
-	Queue *filaExame = q_create();
-	Queue *filaLaudo = q_create();;
+	ListaPaciente *listaPacientes = ll_create();
+	QueueExame *filaExame = qExame_create();
+	QueueLaudo *filaLaudo = qLaudo_create();
 
-	raioX *maquina[5];
+	RAIO maquinas[5];
+	
+	for (int i = 0; i < 5; i++){
+		RAIO *r = (RAIO *)malloc(sizeof(RAIO));
+		strcpy(r->id, " ");
+		r->tempo = 0;
+		maquinas[i] = r;
+	}
 	
 	while (tempo <= 200) {
 		srand(time(NULL));
-		prob = rand() % (10 + 1 - 1) + 1;
+		prob = (rand() % (10 + 1 - 1)) + 1;
 		if(prob == 1 || prob == 2){
 			paciente *p = cria_paciente(tempo);
-			p = (void) p;
-			dv_insert(listaPacientes, p);
-		}
-		/*
-		if sizeof(maquinas) < 5{
-			struct raioX
-			tempoFinal = rand(5,10);
-			paciente = id paciente;
+			ll_append(listaPacientes, p);
 		}
 		
-		verificaRaioX(*raiox){
-			verificar se um exame acabou:
-				Se sim;
-					retira o exame da lista
-					cria um registro(id paciente, instante de tempo, condição)
-					adiciona o registro na fila para laudo
-		}
+		verificaRaioX(maquinas, filaExame, filaLaudo, tempo);
 
-		*/
 		tempo++;
 	}
 

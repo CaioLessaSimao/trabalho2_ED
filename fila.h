@@ -1,10 +1,11 @@
 #ifndef FILA_H
 #define FILA_H
 
-typedef struct queue_struct Queue;
-typedef struct queue_node QueueNode;
+typedef struct queue_struct_exame QueueExame;
+typedef struct queue_node_exame QueueNodeExame;
 
-Queue *q_create(char tipo);
-int q_is_empty(Queue *q);
-void q_enqueue(Queue *q, void v);
+QueueExame *qExame_create();
+int qExame_is_empty(QueueExame *q);
+void qExame_enqueue(QueueExame *q, char v[12]);
+
 #endif
