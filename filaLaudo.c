@@ -1,53 +1,87 @@
 #include "filaLaudo.h"
-#include <time.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
-struct registro_struct{
-	int id;
-	int tempo;
-	char condicao[16];
+struct registro_struct {
+  int id;
+  int tempo;
+  char condicao[20];
 };
 
-struct queue_struct_laudo{
-	QueueNodeLaudo *front;
-	QueueNodeLaudo *rear;
+struct queue_struct_laudo {
+  QueueNodeLaudo *front;
+  QueueNodeLaudo *rear;
 };
 
-struct queue_node_laudo{
-	registro info;
-	QueueNodeLaudo *next;
+struct queue_node_laudo {
+  registro *info;
+  QueueNodeLaudo *next;
 };
 
-void create_registro(QueueLaudo *filaLaudo, char id[12],int instante){
-	
+
+static char *sort_condition() {
+  char *condition = (char *)malloc(20 * sizeof(char));
+
+  int t = rand() % 3;
+  switch (t) {
+  case 0:
+    strcpy(condition, "normal");
+    break;
+  case 1:
+    strcpy(condition, "perigoso");
+    break;
+  case 2:
+    strcpy(condition, "muito perigoso");
+    break;
+
+    return condition;
+  }
+  return " ";
 }
 
 
-QueueLaudo *qLaudo_create(){
-
-	QueueLaudo *q = (QueueLaudo *)malloc(sizeof(QueueLaudo));
-
-	q->front = q->rear = NULL;
-
-	return q;
+registro *create_registro(QueueLaudo *filaLaudo, int id, int instante) {
+  registro *r = (registro *)malloc(sizeof(registro));
+  r->id = id;
+  r->tempo = instante;
+  strcpy(r->condicao, sort_condition());
+  return r;
 }
 
-int qLaudo_is_empty(QueueLaudo *q){
-   return q->front == NULL;
+
+QueueLaudo *qLaudo_create() {
+  QueueLaudo *q = (QueueLaudo *)malloc(sizeof(QueueLaudo));
+  q->front = q->rear = NULL;
+  return q;
 }
 
-void qLaudo_enqueue(QueueLaudo *q, registro v){
-   QueueNodeLaudo *node = (QueueNodeLaudo *)malloc(sizeof(QueueNodeLaudo));
-   node->info = v;
-   node->next = NULL;
 
-   if (qLaudo_is_empty(q))
-      q->front = node;
-   else
-      q->rear->next = node;
+int qLaudo_is_empty(QueueLaudo *q) { return q->front == NULL; }
 
-   q->rear = node;
+
+int getLaudoId(QueueLaudo *FilaLaudo){
+  return FilaLaudo->front->info->id;
+}
+
+
+void qLaudo_enqueue(QueueLaudo *q, registro *v) {
+  QueueNodeLaudo *node = (QueueNodeLaudo *)malloc(sizeof(QueueNodeLaudo));
+  node->info = v;
+  node->next = NULL;
+
+  if (qLaudo_is_empty(q))
+    q->front = node;
+  else
+    q->rear->next = node;
+
+  q->rear = node;
+}
+
+
+void retiraLaudo(QueueLaudo *filaLaudo){
+  QueueNodeLaudo *n = filaLaudo->front;
+  filaLaudo->front = filaLaudo->front->next;
+  free(n);
 }
