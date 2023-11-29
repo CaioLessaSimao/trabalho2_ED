@@ -29,3 +29,38 @@ O projeto se baseia na simulação de um ambiente hospitalar com objetivo de aux
 - `MEDICO`: struct que define os radiologistas que fazem os laudos
 - `NodePaciente`: struct que define o nó da lista de pacientes
 - `ListaPaciente`: struct que define a lista de pacientes
+
+## Principais Desisões
+
+TAD(s):
+- Optamos por manipulat todas as filas usando listas encadeadas pela maior facilidade na alocaçaõ de memória e manipulação de dados, como em Paciente:
+  
+```
+struct listaPaciente_struct{
+  NodePaciente *first;	
+};
+
+struct nodePaciente_struct{
+  paciente *info;
+  NodePaciente *next;
+};
+```
+- Como optamos por criar uma lista geral de pacientes, uma fila para raio X e uma fila para Laudos a estrutura se manteve. com funções auxiliares para adicionar e remover estruturas da lista. Exemplo:
+  
+```
+
+ListaPaciente *ll_create(){
+  ListaPaciente *l = (ListaPaciente *)malloc(sizeof(ListaPaciente));
+    l->first = NULL; 
+  return l;
+}
+
+void ll_append(ListaPaciente *lista, paciente *p){
+  NodePaciente *n = (NodePaciente *)malloc(sizeof(NodePaciente));
+  n->info = p;
+  n->next = NULL;
+  
+  if(lista->first == NULL){
+    lista->first = n;
+  }
+```
