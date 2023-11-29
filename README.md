@@ -64,3 +64,90 @@ void ll_append(ListaPaciente *lista, paciente *p){
     lista->first = n;
   }
 ```
+Funcionamento: <br><br>
+Dentro do main, após a inicialização de variáveis, basicamente duas funções controla os aspectos mais cruciais, verificaRaioX():
+```
+void verificaRaioX(RAIO **maquinas, QueueExame *filaExame, QueueLaudo *filaLaudo, int instante){
+  srand(time(NULL));
+  
+  for(int i = 0; i < 5; i++){
+    if(maquinas[i]->tempo == 0){              //verifica se a máquina está livre
+      
+      if(!qExame_is_empty(filaExame)){
+        maquinas[i]->id = getIdExame(filaExame);
+        retiraNo(filaExame);
+        maquinas[i]->tempo = ((rand() % (5 + 1 - 10)) + 10) + instante; //adicionei o instante atual 
+      }
+    }  
+    else{
+      //printf("tempo maquina[%d]: %d, tempo atual: %d\n", i, maquinas[i]->tempo, instante);
+      if(maquinas[i]->tempo >= instante){     //verifica se terminou o raio X
+        registro *r = create_registro(filaLaudo, maquinas[i]->id, instante);
+        qLaudo_enqueue(filaLaudo, r);
+
+        //levando proximo paciente para fazer raio X
+        if(!qExame_is_empty(filaExame)){
+          maquinas[i]->id = getIdExame(filaExame);
+          retiraNo(filaExame);
+          maquinas[i]->tempo = (rand() % ((5 + 1 - 10)) + 10) + instante;
+        }
+        else{
+          maquinas[i]->id = -1;
+          maquinas[i]->tempo = 0;
+        }
+      }
+    }
+  }
+}
+```
+Essa função é responsável por acessar a lista de maquinas e através dos seus campos internos designar ou retirar pacientes 
+para a próxima fila. Assim como em verificaLaudo():
+```
+void verificaLaudo(MEDICO **medicos, QueueLaudo *filaLaudo, ListaPaciente *lista, int instante){
+  srand(time(NULL));
+  
+  for(int i = 0; i < 3; i++){
+    if (medicos[i]->tempo == 0){          //verifica se o médico está livre
+      if(!qLaudo_is_empty(filaLaudo)){
+        medicos[i]->id = getLaudoId(filaLaudo);
+        retiraLaudo(filaLaudo);
+        printf("sendo atendido\n");
+        medicos[i]->tempo = instante + (rand() % (30 - 10 + 1) + 10);
+      }
+    }
+    else{
+      if(medicos[i]->tempo == instante){    //verifica se o laudo foi emitido  
+        int idAlta = medicos[i]->id;
+        paciente *p = getPaciente(lista, idAlta);
+        //p->tempoLaudo = instante;                 - Devia funcionar
+        //p->estado     = Sorteio_Patologias();     - Devia funcionar
+
+        printf("paciente %d saiu do hospital\n", idAlta);
+
+        //altaPaciente(lista, idAlta);
+
+
+        if(!qLaudo_is_empty(filaLaudo)){    //chama próximo da lista
+          medicos[i]->id = getLaudoId(filaLaudo);
+          retiraLaudo(filaLaudo);
+          printf("sendo atendido\n");
+          medicos[i]->tempo = instante + (rand() % (30 - 10 + 1) + 10);
+        }
+        else{
+          medicos[i]->id = -1;
+          medicos[i]->tempo = 0;
+        }
+        
+        //medirTempo( resultadoLaudo );
+
+        
+      }
+      /*else{
+        strcpy(medicos[i]->id, " ");
+        medicos[i]->tempo = 0;
+      }*/
+    }
+  }
+}
+
+```
