@@ -127,7 +127,6 @@ void verificaLaudo(MEDICO **medicos, QueueLaudo *filaLaudo, ListaPaciente *lista
 
         //altaPaciente(lista, idAlta);
 
-
         if(!qLaudo_is_empty(filaLaudo)){    //chama próximo da lista
           medicos[i]->id = getLaudoId(filaLaudo);
           retiraLaudo(filaLaudo);
@@ -140,13 +139,7 @@ void verificaLaudo(MEDICO **medicos, QueueLaudo *filaLaudo, ListaPaciente *lista
         }
         
         //medirTempo( resultadoLaudo );
-
-        
       }
-      /*else{
-        strcpy(medicos[i]->id, " ");
-        medicos[i]->tempo = 0;
-      }*/
     }
   }
 }
