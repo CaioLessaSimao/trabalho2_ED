@@ -35,7 +35,7 @@ O projeto se baseia na simulação de um ambiente hospitalar com objetivo de aux
 TAD(s):<br><br>
 Optamos por manipular todas as filas usando listas encadeadas pela maior facilidade na alocação de memória e manipulação de dados, como em Paciente:
   
-```
+```C
 struct listaPaciente_struct{
   NodePaciente *first;	
 };
@@ -44,6 +44,7 @@ struct nodePaciente_struct{
   paciente *info;
   NodePaciente *next;
 };
+
 ```
 Como optamos por criar uma lista geral de pacientes, uma fila para raio X e uma fila para Laudos a estrutura se manteve. com funções auxiliares para adicionar e remover estruturas da lista. Exemplo:
   
