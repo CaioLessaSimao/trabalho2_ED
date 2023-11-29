@@ -64,7 +64,7 @@ void ll_append(ListaPaciente *lista, paciente *p){
     lista->first = n;
   }
 
-```C
+```
 Funcionamento: <br><br>
 Dentro do main, após a inicialização de variáveis, basicamente duas funções controla os aspectos mais cruciais, verificaRaioX():
 ```C
