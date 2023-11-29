@@ -156,17 +156,14 @@ paciente *cria_paciente(int tempo){
 
 void altaPaciente(ListaPaciente *lista, int idAlta){
   
-  printf("entrei na funcao\n");
   paciente *p = getPaciente(lista, idAlta);
 
   NodePaciente *node = lista->first;      
   NodePaciente *prev = NULL;             
 
   while (node != NULL) {
-    printf("entrei no loop\n");
     
     if (node->info == p)  {
-      printf("achei o paciente\n");
       if (prev == NULL) {
         lista->first = node->next;
       } 
@@ -177,7 +174,6 @@ void altaPaciente(ListaPaciente *lista, int idAlta){
       return;
     } 
     else {
-      printf("nao achei o paciente\n");
       prev = node;
       node = node->next;
     }
@@ -207,17 +203,16 @@ void verificaRaioX(RAIO **maquinas, QueueExame *filaExame, QueueLaudo *filaLaudo
   srand(time(NULL));
   
   for(int i = 0; i < 5; i++){
-    if(maquinas[i]->tempo == 0){              //verifica se a máquina está livre
-      
+    if(maquinas[i]->tempo == 0){              
       if(!qExame_is_empty(filaExame)){
         maquinas[i]->id = getIdExame(filaExame);
         retiraNo(filaExame);
-        maquinas[i]->tempo = ((rand() % (5 + 1 - 10)) + 10) + instante; //adicionei o instante atual 
+        maquinas[i]->tempo = ((rand() % (5 + 1 - 10)) + 10) + instante;  
       }
     }  
     else{
-      //printf("tempo maquina[%d]: %d, tempo atual: %d\n", i, maquinas[i]->tempo, instante);
-      if(maquinas[i]->tempo >= instante){     //verifica se terminou o raio X
+
+      if(maquinas[i]->tempo >= instante){     
         registro *r = create_registro(filaLaudo, maquinas[i]->id, instante);
         qLaudo_enqueue(filaLaudo, r);
 
@@ -249,29 +244,23 @@ void verificaLaudo(MEDICO **medicos, QueueLaudo *filaLaudo, ListaPaciente *lista
       }
     }
     else{
-      if(medicos[i]->tempo == instante){      
+      if(medicos[i]->tempo == instante){     
         int idAlta = medicos[i]->id;
         
         paciente *p = getPaciente(lista, idAlta);
         
         setTempoLaudo(p, instante);
         setEstado(p, Sorteio_Patologias());
-        //printf("%d\n", p->estado);
-
-        //p->tempoLaudo = instante;                 //Devia funcionar
-        //p->estado     = Sorteio_Patologias();     //Devia funcionar
-
-        //printf("paciente %d saiu do hospital\n", idAlta);
 
         altaPaciente(lista, idAlta);
 
         verificaMetricas(p, tempoPatologia, pacientesPatologia, ptrLaudo, ptrAlta, ptrPrazo);
 
 
-        if(!qLaudo_is_empty(filaLaudo)){    //chama próximo da lista
+        if(!qLaudo_is_empty(filaLaudo)){   
           medicos[i]->id = getLaudoId(filaLaudo);
           retiraLaudo(filaLaudo);
-          //printf("sendo atendido\n");
+
           medicos[i]->tempo = instante + (rand() % (30 - 10 + 1) + 10);
         }
         else{

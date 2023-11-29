@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <Windows.h>
+#include <unistd.h>
 
 int main() {
   int prob;
@@ -45,9 +45,8 @@ int main() {
   for (int i = 0; i < 5; i++) {
     medicos[i] = create_MEDICO(-1, 0);
   }
-
+  
   while (tempo <= 43700) {
-    //printf("%d\n", tempo);
     
     srand(time(NULL));
     prob = (rand() % (10 + 1 - 1)) + 1;
@@ -55,7 +54,6 @@ int main() {
 
     if (prob == 1 || prob == 2) {
       paciente *p = cria_paciente(tempo);
-      //printf("paciente %d entrou\n", tempo);
       ll_append(listaPacientes, p);
 
       int idE = getIdPaciente(p);
@@ -67,12 +65,12 @@ int main() {
     verificaLaudo(medicos, filaLaudo, listaPacientes, tempo, tempoPatologia, pacientesPatologia,ptrLaudo, ptrAlta, ptrPrazo);
 
     if(tempo % 10 == 0){
-      //resolveMetricas(tempoPatologia, pacientesPatologia, laudoTotal, pacientesAlta, foraPrazo);
+      resolveMetricas(tempoPatologia, pacientesPatologia, laudoTotal, pacientesAlta, foraPrazo);
     }
 
-    //Sleep(5);
+    sleep(5);
     tempo++;
   }
-
+  
   return 0;
 }
