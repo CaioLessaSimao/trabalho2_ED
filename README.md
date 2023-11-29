@@ -32,7 +32,7 @@ O projeto se baseia na simulação de um ambiente hospitalar com objetivo de aux
 
 ## Principais Desisões
 
-TAD(s):<br>
+TAD(s):<br><br>
 Optamos por manipular todas as filas usando listas encadeadas pela maior facilidade na alocação de memória e manipulação de dados, como em Paciente:
   
 ```
