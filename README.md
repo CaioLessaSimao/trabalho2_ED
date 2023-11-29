@@ -48,8 +48,7 @@ struct nodePaciente_struct{
 ```
 Como optamos por criar uma lista geral de pacientes, uma fila para raio X e uma fila para Laudos a estrutura se manteve. com funções auxiliares para adicionar e remover estruturas da lista. Exemplo:
   
-```
-
+```C
 ListaPaciente *ll_create(){
   ListaPaciente *l = (ListaPaciente *)malloc(sizeof(ListaPaciente));
     l->first = NULL; 
@@ -64,10 +63,11 @@ void ll_append(ListaPaciente *lista, paciente *p){
   if(lista->first == NULL){
     lista->first = n;
   }
-```
+
+```C
 Funcionamento: <br><br>
 Dentro do main, após a inicialização de variáveis, basicamente duas funções controla os aspectos mais cruciais, verificaRaioX():
-```
+```C
 void verificaRaioX(RAIO **maquinas, QueueExame *filaExame, QueueLaudo *filaLaudo, int instante){
   srand(time(NULL));
   
@@ -103,7 +103,7 @@ void verificaRaioX(RAIO **maquinas, QueueExame *filaExame, QueueLaudo *filaLaudo
 ```
 Essa função é responsável por acessar a lista de maquinas e através dos seus campos internos designar ou retirar pacientes 
 para a próxima fila. Assim como em verificaLaudo():
-```
+```C
 void verificaLaudo(MEDICO **medicos, QueueLaudo *filaLaudo, ListaPaciente *lista, int instante){
   srand(time(NULL));
   
