@@ -82,6 +82,10 @@ void qLaudo_enqueue(QueueLaudo *q, registro *v) {
 
 void retiraLaudo(QueueLaudo *filaLaudo){
   QueueNodeLaudo *n = filaLaudo->front;
-  filaLaudo->front = filaLaudo->front->next;
+  //filaLaudo->front = filaLaudo->front->next;
+  if (filaLaudo->front != filaLaudo->rear)
+      filaLaudo->front = filaLaudo->front->next;
+   else
+      filaLaudo->front = filaLaudo->rear = NULL;
   free(n);
 }

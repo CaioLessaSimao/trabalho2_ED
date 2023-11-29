@@ -2,10 +2,10 @@
 CC = gcc
 
 # Compiler flags
-CFLAGS = -Wall
+CFLAGS = -g -Wall -Wextra
 
 # Source files
-SRCS = main.c pcnt.c fila.c filaLaudo.c
+SRCS = main.c pcnt.c fila.c filaLaudo.c metric.c
 
 # Object files
 OBJS = $(SRCS:.c=.o)

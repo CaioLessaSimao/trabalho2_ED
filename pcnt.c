@@ -53,6 +53,26 @@ int getIdPaciente(paciente *p){
   return p->id;
 }
 
+int getTempoLaudo(paciente *p){
+  return p->tempoLaudo;
+}
+
+int getTempoEntrada(paciente *p){
+  return p->tempoEntrada;
+}
+
+int getEstado(paciente *p){
+  return p->estado;
+}
+
+void setTempoLaudo(paciente *p, int v){
+  p->tempoLaudo = v;
+}
+
+void setEstado(paciente *p, int v){
+  p->estado = v;
+}
+
 
 void imprimirRaio(RAIO *raio) {
   printf("ID: %d, Tempo: %d\n", raio->id, raio->tempo); 
@@ -135,51 +155,53 @@ paciente *cria_paciente(int tempo){
 
 
 void altaPaciente(ListaPaciente *lista, int idAlta){
-    NodePaciente *node = malloc(sizeof(NodePaciente));
-    NodePaciente *n    = malloc(sizeof(NodePaciente));
+  
+  printf("entrei na funcao\n");
+  paciente *p = getPaciente(lista, idAlta);
 
-    if(lista->first->info->id == idAlta){
-        lista->first = lista->first->next;
+  NodePaciente *node = lista->first;      
+  NodePaciente *prev = NULL;             
+
+  while (node != NULL) {
+    printf("entrei no loop\n");
+    
+    if (node->info == p)  {
+      printf("achei o paciente\n");
+      if (prev == NULL) {
+        lista->first = node->next;
+      } 
+      else{ 
+        prev->next = node->next;
+      }
+      free(node);
+      return;
+    } 
+    else {
+      printf("nao achei o paciente\n");
+      prev = node;
+      node = node->next;
     }
-
-    for(node = lista->first; node->next->next != NULL; node = node->next){
-        if(node->next->info->id == idAlta){
-
-            n = node->next;
-            node->next = node->next->next;
-            free(n);
-        }
-    }
+  }
+  
 }
 
 
 int Sorteio_Patologias(){
-    float saudeNormal = 0.3;
-    float bronquite = 0.2;
-    float pneumonia = 0.2;
-    float fraturaFemur = 0.15;
-    float apendicite = 0.15;
+    int numero = rand() % 100 + 1;
 
-    srand(time(NULL));
-
-    float randomValue = (float)rand() / RAND_MAX;
-
-    // Verifica em qual intervalo o número aleatório encaixa
-    if (randomValue < saudeNormal) {
-        return 2;
-    } else if (randomValue < saudeNormal + bronquite) {
-        return 3;
-    } else if (randomValue < saudeNormal + bronquite + pneumonia) {
-        return 4;
-    } else if (randomValue < saudeNormal + bronquite + pneumonia + fraturaFemur) {
-        return 5;
-    } else {
-        return 6;
-    }
-
-    return 2;
+  switch (numero) {
+    case 1 ... 30:
+      return 0;
+    case 31 ... 50:
+      return 1;
+    case 51 ... 70:
+      return 2;
+    case 71 ... 85:
+      return 3;
+    case 86 ... 100:
+      return 4;
+  }
 }
-
 
 void verificaRaioX(RAIO **maquinas, QueueExame *filaExame, QueueLaudo *filaLaudo, int instante){
   srand(time(NULL));
@@ -215,49 +237,48 @@ void verificaRaioX(RAIO **maquinas, QueueExame *filaExame, QueueLaudo *filaLaudo
 }
 
 
-void verificaLaudo(MEDICO **medicos, QueueLaudo *filaLaudo, ListaPaciente *lista, int instante){
+void verificaLaudo(MEDICO **medicos, QueueLaudo *filaLaudo, ListaPaciente *lista, int instante, int *tempoPatologia, int *pacientesPatologia,int *ptrLaudo, int *ptrAlta, int *ptrPrazo){
   srand(time(NULL));
-  
+
   for(int i = 0; i < 3; i++){
-    if (medicos[i]->tempo == 0){          //verifica se o médico está livre
+    if (medicos[i]->tempo == 0){          
       if(!qLaudo_is_empty(filaLaudo)){
         medicos[i]->id = getLaudoId(filaLaudo);
         retiraLaudo(filaLaudo);
-        printf("sendo atendido\n");
         medicos[i]->tempo = instante + (rand() % (30 - 10 + 1) + 10);
       }
     }
     else{
-      if(medicos[i]->tempo == instante){    //verifica se o laudo foi emitido  
+      if(medicos[i]->tempo == instante){      
         int idAlta = medicos[i]->id;
+        
         paciente *p = getPaciente(lista, idAlta);
-        //p->tempoLaudo = instante;                 - Devia funcionar
-        //p->estado     = Sorteio_Patologias();     - Devia funcionar
+        
+        setTempoLaudo(p, instante);
+        setEstado(p, Sorteio_Patologias());
+        //printf("%d\n", p->estado);
 
-        printf("paciente %d saiu do hospital\n", idAlta);
+        //p->tempoLaudo = instante;                 //Devia funcionar
+        //p->estado     = Sorteio_Patologias();     //Devia funcionar
 
-        //altaPaciente(lista, idAlta);
+        //printf("paciente %d saiu do hospital\n", idAlta);
+
+        altaPaciente(lista, idAlta);
+
+        verificaMetricas(p, tempoPatologia, pacientesPatologia, ptrLaudo, ptrAlta, ptrPrazo);
 
 
         if(!qLaudo_is_empty(filaLaudo)){    //chama próximo da lista
           medicos[i]->id = getLaudoId(filaLaudo);
           retiraLaudo(filaLaudo);
-          printf("sendo atendido\n");
+          //printf("sendo atendido\n");
           medicos[i]->tempo = instante + (rand() % (30 - 10 + 1) + 10);
         }
         else{
           medicos[i]->id = -1;
           medicos[i]->tempo = 0;
         }
-        
-        //medirTempo( resultadoLaudo );
-
-        
       }
-      /*else{
-        strcpy(medicos[i]->id, " ");
-        medicos[i]->tempo = 0;
-      }*/
     }
   }
 }
