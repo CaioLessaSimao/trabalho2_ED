@@ -30,7 +30,7 @@ O projeto se baseia na simulação de um ambiente hospitalar com objetivo de aux
 - `NodePaciente`: struct que define o nó da lista de pacientes
 - `ListaPaciente`: struct que define a lista de pacientes
 
-## Principais Desisões
+## Principais Decisões e Funcionamento
 
 TAD(s):<br><br>
 Optamos por manipular todas as filas usando listas encadeadas pela maior facilidade na alocação de memória e manipulação de dados, como em Paciente:
